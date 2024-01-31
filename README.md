@@ -2,6 +2,9 @@
 
 
 We used Diffusion Probabilistic Model proposed by Bo Li et al 2023, referenced below
+
+
+
 ``
 @inproceedings{li2023bbdm,
   title={BBDM: Image-to-image translation with Brownian bridge diffusion models},
