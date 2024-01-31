@@ -134,7 +134,8 @@ class BrownianBridgeModel(nn.Module):
 
         if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
-            #recloss = (objective - objective_recon).abs().mean() + (objective[:,:,20:108,20:108] - objective_recon[:,:,20:108,20:108]).abs().mean()
+            print(objective_recon.shape, mask.shape)
+            bl_loss = boundary_loss(objective_recon, mask)
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
