@@ -142,7 +142,7 @@ class BrownianBridgeModel(nn.Module):
         
         mk,obj = mask.detach().cpu().numpy(), objective_recon.detach().cpu().numpy()
         mk,obj = np.transpose(mk,(2,3,1,0)),np.transpose(obj,(2,3,1,0))
-        print("\n\nHERE",np.sum(obj_r1), np.sum(mask1))
+        print("\n\nHERE",np.sum(mask))
         if(int(np.sum(mask)) > 0):
             mk = rso(mk,0,8)
             recloss = (objective - objective_recon).abs().mean()
