@@ -16,7 +16,7 @@ data:
   dataset_name: '3fold'
   dataset_type: 'custom_aligned'
   dataset_config:
-    dataset_path: '/projects/vb21/jiezy/ELEC542/BBDM/datasets/3foldWithMasks'
+    dataset_path: '/content/MyDrive/MyDrive/3fold_with_masks/'
     image_size: 256
     channels: 3
     to_normal: True
