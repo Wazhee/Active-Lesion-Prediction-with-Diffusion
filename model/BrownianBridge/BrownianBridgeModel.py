@@ -131,7 +131,7 @@ class BrownianBridgeModel(nn.Module):
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         BoundaryLoss = SurfaceLoss
-
+        boundary_loss = BoundaryLoss(idc=[1])
         if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
             print(objective_recon.shape, mask.shape)
