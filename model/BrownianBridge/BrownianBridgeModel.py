@@ -12,6 +12,24 @@ from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetM
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
 from torch import Tensor, einsum
 
+def simplex(t: Tensor, axis=1) -> bool:
+    _sum = cast(Tensor, t.sum(axis).type(torch.float32))
+    _ones = torch.ones_like(_sum, dtype=torch.float32)
+    return torch.allclose(_sum, _ones)
+
+def one_hot(t: Tensor, axis=1) -> bool:
+    return simplex(t, axis) and sset(t, [0, 1])
+
+def probs2one_hot(probs: Tensor) -> Tensor:
+    _, K, *_ = probs.shape
+    assert simplex(probs)
+
+    res = class2one_hot(probs2class(probs), K)
+    assert res.shape == probs.shape
+    assert one_hot(res)
+
+    return res
+
 class SurfaceLoss():
     def __init__(self, **kwargs):
         # Self.idc is used to filter out some classes of the target mask. Use fancy indexing
