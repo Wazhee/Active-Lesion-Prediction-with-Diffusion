@@ -10,7 +10,9 @@ import numpy as np
 from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
+"""BoundaryLoss Resources"""
 from torch import Tensor, einsum
+from typing import Any, Callable, Iterable, List, Set, Tuple, TypeVar, Union, cast
 
 def simplex(t: Tensor, axis=1) -> bool:
     _sum = cast(Tensor, t.sum(axis).type(torch.float32))
@@ -48,6 +50,7 @@ class SurfaceLoss():
         loss = multipled.mean()
 
         return loss
+"""BoundaryLoss Resources"""
 
 class BrownianBridgeModel(nn.Module):
     def __init__(self, model_config):
