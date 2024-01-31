@@ -11,6 +11,24 @@ from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
 
+class SurfaceLoss():
+    def __init__(self, **kwargs):
+        # Self.idc is used to filter out some classes of the target mask. Use fancy indexing
+        self.idc: List[int] = kwargs["idc"]
+        print(f"Initialized {self.__class__.__name__} with {kwargs}")
+
+    def __call__(self, probs: Tensor, dist_maps: Tensor) -> Tensor:
+        assert simplex(probs)
+        assert not one_hot(dist_maps)
+
+        pc = probs[:, self.idc, ...].type(torch.float32)
+        dc = dist_maps[:, self.idc, ...].type(torch.float32)
+
+        multipled = einsum("bkwh,bkwh->bkwh", pc, dc)
+
+        loss = multipled.mean()
+
+        return loss
 
 class BrownianBridgeModel(nn.Module):
     def __init__(self, model_config):
@@ -95,6 +113,7 @@ class BrownianBridgeModel(nn.Module):
         t = torch.randint(0, self.num_timesteps, (b,), device=device).long()
         return self.p_losses(x, y, mask, context, t)
 
+
     def p_losses(self, x0, y, mask, context, t, noise=None):
         """
         model loss
@@ -110,24 +129,15 @@ class BrownianBridgeModel(nn.Module):
 
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
+        BoundaryLoss = SurfaceLoss
 
-        import numpy as np
-        np_mask = mask.numpy()
-        non_black = (mask != 0)
-        xn, yn = np.where(non_black)
-        if(int(np.sum(mask)) > 0):
-            x1,x2,y1,y2 = 0,len(mask),0,len(mask)
-            boundary_x,boundary_y = [np.max(x1, np.min(xn)-5), np.min(x2, np.max(xn)+5)],[np.max(y1, np.min(yn)-5), np.min(y2, np.max(yn)+5)]
-            recloss = (objective - objective_recon).abs().mean() + (objective[:,:,boundary_x[0]:boundary_x[1],boundary_y[0]:boundary_y[1]]
-             - objective_recon[:,:,boundary_x[0]:boundary_x[1],boundary_y[0]:boundary_y[1]]).abs().mean()
-        else:  
-            if self.loss_type == 'l1':
-                recloss = (objective - objective_recon).abs().mean()
-                #recloss = (objective - objective_recon).abs().mean() + (objective[:,:,20:108,20:108] - objective_recon[:,:,20:108,20:108]).abs().mean()
-            elif self.loss_type == 'l2':
-                recloss = F.mse_loss(objective, objective_recon)
-            else:
-                raise NotImplementedError()
+        if self.loss_type == 'l1':
+            recloss = (objective - objective_recon).abs().mean()
+            #recloss = (objective - objective_recon).abs().mean() + (objective[:,:,20:108,20:108] - objective_recon[:,:,20:108,20:108]).abs().mean()
+        elif self.loss_type == 'l2':
+            recloss = F.mse_loss(objective, objective_recon)
+        else:
+            raise NotImplementedError()
 
         x0_recon = self.predict_x0_from_objective(x_t, y, t, objective_recon)
         log_dict = {
