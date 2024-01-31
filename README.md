@@ -1,5 +1,11 @@
 # DALP: Diffusion based Active Lesion Prediction Model
 
+```
+Short Description:
+Diffusion probabilistic models are generative AI models, capable of generating high fidelity images. By gradually adding noise to the input data (forward diffusion), and learning to generate the input from noise (reverse diffusion), DPMs have achieved state of the art performance in image generation. We used a DPM to predict active MS lesions similar to subtract pre-and post contrast T1 weighted images (ground truth). We performed leave one out K-fold cross validation for training and validation of DPM. To measure the overlap between predicted and ground truth active lesions, we used Dice Similarity (DS). 
+```
+
+
 ``Architecture Diagram``
 <img width="866" alt="Screenshot 2024-01-31 at 2 45 55 PM" src="https://github.com/Wazhee/Active-Lesion-Prediction-with-Diffusion/assets/34732790/11798bc7-577c-41b9-9eb3-5718fe1b6b92">
 
