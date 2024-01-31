@@ -107,7 +107,6 @@ def DDP_launcher(world_size, run_fn, config):
 def main():
     nconfig, dconfig = parse_args_and_config()
     args = nconfig.args
-    print("\n\ngot here", nconfig)
     gpu_ids = args.gpu_ids
     if gpu_ids == "-1": # Use CPU
         nconfig.training.use_DDP = False
