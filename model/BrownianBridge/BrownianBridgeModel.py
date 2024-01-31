@@ -10,6 +10,7 @@ import numpy as np
 from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
+from torch import Tensor, einsum
 
 class SurfaceLoss():
     def __init__(self, **kwargs):
