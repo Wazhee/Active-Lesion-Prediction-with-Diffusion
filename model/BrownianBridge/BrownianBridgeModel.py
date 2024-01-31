@@ -10,7 +10,35 @@ import numpy as np
 from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
+from scipy import ndimage
+import scipy.ndimage.morphology as morpho
 
+# remove small objects
+def rso(im,small_object_size_threshold,max_dilat):
+    # detect image objects
+    sz_big=10000
+    sz_small=small_object_size_threshold
+    dfac = int( max_dilat*(1-min(1,(max(0,sz_small)/sz_big))) )
+    labeled, nr_objects = ndimage.label(im)
+    result = labeled*0
+    for obj_id in range(1, nr_objects+1):
+        # creates a binary image with the current object
+        obj_img = (labeled==obj_id)
+        # computes object's area
+        area = np.sum(obj_img)
+        if area>small_object_size_threshold:
+            if max_dilat>0:
+                # dilatation factor inversely proportional to area
+                dfac = int( max_dilat*(1-min(1,(max(0,area-sz_small)/sz_big))) )  
+                
+            # dilates object
+                dilat = morpho.binary_dilation(obj_img, iterations=dfac)
+            else:
+                dilat =obj_img
+            result += dilat#obj_img
+            #result=np.logical_or(result,obj_img)
+    return(result)
+    
 class BrownianBridgeModel(nn.Module):
     def __init__(self, model_config):
         super().__init__()
@@ -105,21 +133,20 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
+        bl_alpha = 0.01
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         
-        mk,obj_r = mask.detach().cpu().numpy(), objective_recon.detach().cpu().numpy()
-        mask1,mask2 = mk[0][0],mk[1][0]
-        obj_r1,obj_r2 = obj_r[0][0],obj_r[1][0]
+        mk,obj = mask.detach().cpu().numpy(), objective_recon.detach().cpu().numpy()
+        mk,obj = np.transpose(mk,(2,3,1,0)),np.transpose(obj,(2,3,1,0))
         print("\n\nHERE",np.sum(obj_r1), np.sum(mask1))
         if(int(np.sum(mask)) > 0):
-            x1,x2,y1,y2 = 0,len(mask),0,len(mask)
-            boundary_x,boundary_y = [np.max(x1, np.min(xn)-5), np.min(x2, np.max(xn)+5)],[np.max(y1, np.min(yn)-5), np.min(y2, np.max(yn)+5)]
-            recloss = (objective - objective_recon).abs().mean() + (objective[:,:,boundary_x[0]:boundary_x[1],boundary_y[0]:boundary_y[1]]
-             - objective_recon[:,:,boundary_x[0]:boundary_x[1],boundary_y[0]:boundary_y[1]]).abs().mean()
+            mk = rso(mk,0,8)
+            recloss = (objective - objective_recon).abs().mean()
+            bdloss = ((objective*mk) - (objective_recon*mk)).abs().mean()
         else:  
             if self.loss_type == 'l1':
                 recloss = (objective - objective_recon).abs().mean()
