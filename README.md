@@ -1,4 +1,4 @@
-# Active-Lesion-Prediction-with-Diffusion
+# DALP: Diffusion based Active Lesion Prediction Model
 
 
 We used Diffusion Probabilistic Model proposed by Bo Li et al 2023, referenced below
