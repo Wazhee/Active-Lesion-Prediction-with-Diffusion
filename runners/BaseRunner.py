@@ -378,14 +378,14 @@ class BaseRunner(ABC):
             wandb.login()
             wandb.init(
               # Set the project where this run will be logged
-              project="ONSD with no augmentation", 
+              project="ALP with Diffusion", 
               # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
-              name="experiment_{ONSD}", 
+              name="experiment_{ALP}", 
               # Track hyperparameters and run metadata
               config={
               "learning_rate": 0.02,
               "architecture": "BBDM",
-              "dataset": "ONSD",
+              "dataset": "Multiparametric MRI with Masks",
               "epochs": self.config.training.n_epochs,
               })
 
