@@ -111,8 +111,10 @@ class BrownianBridgeModel(nn.Module):
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         
-        mk = mask.detach().cpu().numpy()
-        print("\n\nHERE",mk.shape, np.sum(mk[0][0]), mk[0][0])
+        mk,obj_r = mask.detach().cpu().numpy(), objective_recon
+        mask1,mask2 = mk[0][0],mk[1][0]
+        obj_r1,obj_r2 = obj_r[0][0],obj_r[1][0]
+        print("\n\nHERE",np.sum(obj_r1), np.sum(mask1))
         if(int(np.sum(mask)) > 0):
             x1,x2,y1,y2 = 0,len(mask),0,len(mask)
             boundary_x,boundary_y = [np.max(x1, np.min(xn)-5), np.min(x2, np.max(xn)+5)],[np.max(y1, np.min(yn)-5), np.min(y2, np.max(yn)+5)]
