@@ -53,7 +53,7 @@ def lesion_found(mask):
             mask[i] = rso(mask[i],0,10)
             print(torch.sum(mask[i]))
         else:
-            mask[i] = (mask[i] * 0) + 1
+            mask[i] = mask[i]*-1
     return found
 
 class BrownianBridgeModel(nn.Module):
