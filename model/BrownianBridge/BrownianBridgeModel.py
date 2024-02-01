@@ -147,7 +147,7 @@ class BrownianBridgeModel(nn.Module):
         if(sum1 > 0 or sum2 > 0):
             print("\n\nHERE", mk.shape, sum1, sum2)
             recloss = (objective - objective_recon).abs().mean()
-            bdloss = ((objective*mk) - (objective_recon*mk)).abs().mean()
+            # bdloss = ((objective*mk) - (objective_recon*mk)).abs().mean()
         else:  
             if self.loss_type == 'l1':
                 recloss = (objective - objective_recon).abs().mean()
