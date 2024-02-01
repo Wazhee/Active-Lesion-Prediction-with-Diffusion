@@ -38,7 +38,16 @@ def rso(im,small_object_size_threshold,max_dilat):
             result += dilat#obj_img
             #result=np.logical_or(result,obj_img)
     return(result)
-    
+
+def lesion_found(mask):
+    found = False
+    for i in range(len(mask):
+        if(torch.sum(mask[i]) > 0):
+            found = True
+        else:
+            (mask[i] * 0) + 1
+    return found
+
 class BrownianBridgeModel(nn.Module):
     def __init__(self, model_config):
         super().__init__()
@@ -139,13 +148,10 @@ class BrownianBridgeModel(nn.Module):
 
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
-        
-        mk,obj = mask.detach().cpu().numpy(), objective_recon.detach().cpu().numpy()
-        mk,obj = np.transpose(mk,(2,3,1,0)),np.transpose(obj,(2,3,1,0))
-        mk,obj = (mk+1)/np.max(mk+1), obj/np.max(obj)
-        sum1,sum2 = int(np.sum(rso(mk[:,:,:,0],0,10))),int(np.sum(rso(mk[:,:,:,1],0,10)))
-        if(sum1 > 0 or sum2 > 0):
-            print("\n\nHERE", mk.shape, sum1, sum2)
+        islesion = lesion_found(mask)
+        if(islesion(mask)):
+            sum1,sum2 = torch.sum(mask[0]),torch.sum(mask[1])
+            print("\n\nLesion FOUND: ", mk.shape, sum1, sum2)
             recloss = (objective - objective_recon).abs().mean()
             # bdloss = ((objective*mk) - (objective_recon*mk)).abs().mean()
         else:  
