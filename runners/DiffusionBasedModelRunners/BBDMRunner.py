@@ -210,22 +210,29 @@ class BBDMRunner(DiffusionBaseRunner):
         # sample = samples[-1]
         sample = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised).to('cpu')
         image_grid = get_image_grid(sample, grid_size, to_normal=self.config.data.dataset_config.to_normal)
+        # save prediction
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, f'skip_sample_{x_cond_name}.png'))
+        im.save(os.path.join(sample_path, f'skip_sample_{x_cond_name[1]}.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_skip_sample', image_grid, self.global_step, dataformats='HWC')
-
+        # save input
         image_grid = get_image_grid(x_cond.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, f'condition_{x_cond_name}.png'))
+        im.save(os.path.join(sample_path, f'condition_{x_cond_name[1]}.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_condition', image_grid, self.global_step, dataformats='HWC')
-
+        # save ground truth
         image_grid = get_image_grid(x.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, f'ground_truth_{x_cond_name}.png'))
+        im.save(os.path.join(sample_path, f'ground_truth_{x_cond_name[1]}.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_ground_truth', image_grid, self.global_step, dataformats='HWC')
+        # save mask 
+        image_grid = get_image_grid(mask.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
+        im = Image.fromarray(image_grid)
+        im.save(os.path.join(sample_path, f'mask_{x_cond_name[1]}.png'))
+        if stage != 'test':
+            self.writer.add_image(f'{stage}_mask', image_grid, self.global_step, dataformats='HWC')
 
     @torch.no_grad()
     def sample_to_eval(self, net, test_loader, sample_path):
