@@ -42,7 +42,10 @@ def rso(im,small_object_size_threshold,max_dilat):
 def lesion_found(mask):
     found = False
     for i in range(len(mask)):
-        if(torch.sum(mask[i]) > 0):
+        tmp = mask[i].detach().cpu().numpy()
+        tmp = np.transpose(mask[i], (1,2,0))
+        tmp = tmp/np.max(tmp)
+        if(torch.sum(tmp]) > 0):
             found = True
         else:
             (mask[i] * 0) + 1
