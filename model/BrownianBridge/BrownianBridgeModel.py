@@ -50,10 +50,10 @@ def lesion_found(mask):
         # tmp = tmp/np.max(tmp)
         if(torch.sum(mask[i]) > min):
             found = True
-            print(torch.sum(mask[i]))
             tmp = (mask[i]*-1)
             tmp = tmp/torch.max(tmp)
             mask[i] = rso(tmp,0,10)
+            print(torch.sum(mask[i]))
         else:
             mask[i] = (mask[i] * 0) + 1
     return found
