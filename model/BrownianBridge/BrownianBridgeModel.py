@@ -149,7 +149,7 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
-        bl_alpha = 0.01
+        bl_alpha = 2 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
@@ -161,7 +161,7 @@ class BrownianBridgeModel(nn.Module):
             sum1,sum2 = torch.sum(mask[0]),torch.sum(mask[1])
             print(" LESION FOUND: ")
             recloss = (objective - objective_recon).abs().mean()
-            bdloss = ((objective*mask) - (objective_recon*mask)).abs().mean()
+            bdloss = bl_alpha * ((objective*mask) - (objective_recon*mask)).abs().mean()
             # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
             rec_loss = recloss + bdloss
         else:  
