@@ -149,7 +149,7 @@ class BrownianBridgeModel(nn.Module):
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         islesion = lesion_found(mask)
-        if(islesion(mask)):
+        if(islesion(mask) == True):
             sum1,sum2 = torch.sum(mask[0]),torch.sum(mask[1])
             print("\n\nLesion FOUND: ", mk.shape, sum1, sum2)
             recloss = (objective - objective_recon).abs().mean()
