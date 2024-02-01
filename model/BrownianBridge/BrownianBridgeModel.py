@@ -46,6 +46,7 @@ def lesion_found(mask):
         tmp = np.transpose(tmp, (1,2,0))
         tmp = tmp/np.max(tmp)
         if(np.sum(tmp) > 0):
+            print(np.sum(tmp))
             found = True
         else:
             (mask[i] * 0) + 1
