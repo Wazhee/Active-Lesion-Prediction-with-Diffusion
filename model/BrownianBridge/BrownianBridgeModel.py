@@ -48,10 +48,8 @@ def lesion_found(mask):
         # tmp = tmp/np.max(tmp)
         if(torch.sum(mask[i]) > min):
             found = True
-            print(torch.sum(mask[i]))
             mask[i] = (mask[i]+1)/torch.max(mask[i]+1)
             mask[i] = rso(mask[i],0,10)
-            print(torch.sum(mask[i]))
         else:
             mask[i] = mask[i]*-1
     return found
@@ -161,7 +159,7 @@ class BrownianBridgeModel(nn.Module):
             sum1,sum2 = torch.sum(mask[0]),torch.sum(mask[1])
             print("\n\nLesion FOUND: ", mask.shape, sum1, sum2)
             recloss = (objective - objective_recon).abs().mean()
-            # bdloss = ((objective*mk) - (objective_recon*mk)).abs().mean()
+            bdloss = ((objective*mask) - (objective_recon*mask)).abs().mean()
         else:  
             if self.loss_type == 'l1':
                 recloss = (objective - objective_recon).abs().mean()
