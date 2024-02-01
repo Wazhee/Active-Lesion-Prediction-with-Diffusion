@@ -25,7 +25,7 @@ def rso(im,small_object_size_threshold,max_dilat):
         # creates a binary image with the current object
         obj_img = (labeled==obj_id)
         # computes object's area
-        area = torch.sum(obj_img)
+        area = np.sum(obj_img)
         if area>small_object_size_threshold:
             if max_dilat>0:
                 # dilatation factor inversely proportional to area
@@ -37,7 +37,8 @@ def rso(im,small_object_size_threshold,max_dilat):
                 dilat =obj_img
             result += dilat#obj_img
             #result=np.logical_or(result,obj_img)
-    return(result)
+    
+    return(torch.from_numpy(result))
 
 def lesion_found(mask):
     found, min = False, -196608
