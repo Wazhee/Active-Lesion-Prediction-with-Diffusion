@@ -188,7 +188,7 @@ class BBDMRunner(DiffusionBaseRunner):
         reverse_sample_path = make_dir(os.path.join(sample_path, 'reverse_sample'))
         reverse_one_step_path = make_dir(os.path.join(sample_path, 'reverse_one_step_samples'))
 
-        (x, x_name), (x_cond, x_cond_name) = batch
+        (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
 
         batch_size = x.shape[0] if x.shape[0] < 4 else 4
 
@@ -211,19 +211,19 @@ class BBDMRunner(DiffusionBaseRunner):
         sample = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised).to('cpu')
         image_grid = get_image_grid(sample, grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'skip_sample.png'))
+        im.save(os.path.join(sample_path, f'skip_sample_{x_cond_name}.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_skip_sample', image_grid, self.global_step, dataformats='HWC')
 
         image_grid = get_image_grid(x_cond.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'condition.png'))
+        im.save(os.path.join(sample_path, f'condition_{x_cond_name}.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_condition', image_grid, self.global_step, dataformats='HWC')
 
         image_grid = get_image_grid(x.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'ground_truth.png'))
+        im.save(os.path.join(sample_path, f'ground_truth_{x_cond_name}.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_ground_truth', image_grid, self.global_step, dataformats='HWC')
 
