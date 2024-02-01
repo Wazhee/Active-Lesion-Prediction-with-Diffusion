@@ -25,7 +25,7 @@ def rso(im,small_object_size_threshold,max_dilat):
         # creates a binary image with the current object
         obj_img = (labeled==obj_id)
         # computes object's area
-        area = np.sum(obj_img)
+        area = torch.sum(obj_img)
         if area>small_object_size_threshold:
             if max_dilat>0:
                 # dilatation factor inversely proportional to area
