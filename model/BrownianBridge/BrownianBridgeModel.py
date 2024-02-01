@@ -158,8 +158,6 @@ class BrownianBridgeModel(nn.Module):
         islesion = lesion_found(mask)
         mask = mask.to('cuda:0')
         if(islesion): # if any lesion found run boundary loss 
-            sum1,sum2 = torch.sum(mask[0]),torch.sum(mask[1])
-            print(" LESION FOUND: ")
             recloss = (objective - objective_recon).abs().mean()
             bdloss = bl_alpha * ((objective*mask) - (objective_recon*mask)).abs().mean()
             # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
