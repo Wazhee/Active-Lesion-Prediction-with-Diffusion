@@ -154,7 +154,7 @@ class BrownianBridgeModel(nn.Module):
         islesion = lesion_found(mask)
         if(islesion):
             sum1,sum2 = torch.sum(mask[0]),torch.sum(mask[1])
-            print("\n\nLesion FOUND: ", mk.shape, sum1, sum2)
+            print("\n\nLesion FOUND: ", mask.shape, sum1, sum2)
             recloss = (objective - objective_recon).abs().mean()
             # bdloss = ((objective*mk) - (objective_recon*mk)).abs().mean()
         else:  
