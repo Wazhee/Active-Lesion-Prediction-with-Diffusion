@@ -242,7 +242,6 @@ class BaseRunner(ABC):
         self.apply_ema()
         self.net.eval()
         sample_path = make_dir(os.path.join(self.config.result.image_path, str(self.global_step)))
-        print(type(train_batch), train_batch)
         if self.config.training.use_DDP:
             self.sample(self.net.module, train_batch, sample_path, stage='train')
             self.sample(self.net.module, val_batch, sample_path, stage='val')
