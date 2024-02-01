@@ -30,7 +30,6 @@ def rso(im,small_object_size_threshold,max_dilat):
             if max_dilat>0:
                 # dilatation factor inversely proportional to area
                 dfac = int( max_dilat*(1-min(1,(max(0,area-sz_small)/sz_big))) )  
-                
             # dilates object
                 dilat = morpho.binary_dilation(obj_img, iterations=dfac)
             else:
@@ -47,10 +46,10 @@ def lesion_found(mask):
         # print(torch.sum(mask[i]), np.sum(tmp))
         # tmp = np.transpose(tmp, (1,2,0))
         # tmp = tmp/np.max(tmp)
-        if(torch.sum(mask[i]) > min+100):
+        if(torch.sum(mask[i]) > min):
             found = True
             print(torch.sum(mask[i]))
-            mask[i] = mask[i]/torch.max(mask[i])
+            mask[i] = mask[i]+1/torch.max(mask[i]+1)
             mask[i] = rso(mask[i],0,10)
             print(torch.sum(mask[i]))
         else:
