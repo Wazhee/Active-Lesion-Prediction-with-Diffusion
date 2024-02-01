@@ -47,9 +47,9 @@ def lesion_found(mask):
         # print(torch.sum(mask[i]), np.sum(tmp))
         # tmp = np.transpose(tmp, (1,2,0))
         # tmp = tmp/np.max(tmp)
-        if(torch.sum(tmp) > min):
+        if(torch.sum(mask[i]) > min):
             found = True
-            print(torch.sum(tmp))
+            print(torch.sum(mask[i]))
         else:
             (mask[i] * 0) + 1
     return found
