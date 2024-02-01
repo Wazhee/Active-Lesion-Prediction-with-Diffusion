@@ -561,7 +561,7 @@ class BaseRunner(ABC):
             traceback.print_exc()
             print('traceback.format_exc():\n%s' % traceback.format_exc())
         # Mark the run as finished
-        wandb.finish()
+        # wandb.finish()
     @torch.no_grad()
     def test(self):
         train_dataset, val_dataset, test_dataset = get_dataset(self.config.data)
