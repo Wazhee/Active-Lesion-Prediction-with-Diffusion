@@ -49,7 +49,6 @@ def lesion_found(mask):
         if(torch.sum(mask[i]) > min):
             found = True
             mask[i] = (mask[i]+1)/torch.max(mask[i]+1)
-            mask[i] = rso(mask[i],0,10)
         else:
             mask[i] = mask[i]*-1
     mask.to('cuda:0')
