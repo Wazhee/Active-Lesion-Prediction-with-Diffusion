@@ -16,8 +16,8 @@ data:
   dataset_name: '3fold'
   dataset_type: 'custom_aligned'
   dataset_config:
-    dataset_path: '/content/MyDrive/MyDrive/LOOCV/'
-    # dataset_path: '/content/MyDrive/MyDrive/LOOCV_aug/'
+    # dataset_path: '/content/MyDrive/MyDrive/LOOCV/'
+    dataset_path: '/content/MyDrive/MyDrive/LOOCV_aug/'
     image_size: 256
     channels: 3
     to_normal: True
