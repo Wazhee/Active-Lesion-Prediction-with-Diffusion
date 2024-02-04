@@ -378,7 +378,7 @@ class BaseRunner(ABC):
             wandb.login()
             wandb.init(
               # Set the project where this run will be logged
-              project="DALP: Diffusion based Active Lesion Prediction", 
+              project="DALP Diffusion based Active Lesion Prediction", 
               # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
               name="experiment_{DALP}", 
               # Track hyperparameters and run metadata
