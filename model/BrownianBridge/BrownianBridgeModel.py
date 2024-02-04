@@ -160,7 +160,7 @@ class BrownianBridgeModel(nn.Module):
             recloss = (objective - objective_recon).abs().mean()
             bdloss = bl_alpha * ((objective*mask) - (objective_recon*mask)).abs().mean()
             # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
-            rec_loss = recloss + bdloss
+            rec_loss = recloss + (bl_alpha * bdloss)
         else:  
             if self.loss_type == 'l1':
                 recloss = (objective - objective_recon).abs().mean()
