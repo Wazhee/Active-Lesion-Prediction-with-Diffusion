@@ -416,7 +416,7 @@ class BaseRunner(ABC):
                                             step=self.global_step,
                                             opt_idx=i,
                                             stage='train')
-
+                        print("\n",loss)
                         loss.backward()
                         if self.global_step % accumulate_grad_batches == 0:
                             self.optimizer[i].step()
