@@ -375,17 +375,16 @@ class BaseRunner(ABC):
         try:
             import wandb
 
-            wandb.login()
             wandb.init(
               # Set the project where this run will be logged
-              project="DALP alpha 4", 
+              project="DALP with Aug alpha 4", 
               # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
               name="experiment_{DALP}", 
               # Track hyperparameters and run metadata
               config={
               "learning_rate": 0.02,
               "architecture": "BBDM",
-              "dataset": "Multiparametric MRI with Masks",
+              "dataset": "LOOCV_aug",
               "epochs": self.config.training.n_epochs,
               })
 
