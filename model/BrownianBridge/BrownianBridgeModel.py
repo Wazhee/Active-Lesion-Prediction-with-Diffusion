@@ -38,7 +38,13 @@ def rso(im,small_object_size_threshold,max_dilat):
             #result=np.logical_or(result,obj_img)
     
     return(torch.from_numpy(result))
-
+# ploss code   
+# if(islesion): # if any lesion found run boundary loss 
+#     recloss = (objective - objective_recon).abs().mean()
+#     bdloss = ((objective*mask) - (objective_recon*mask)).abs().mean()
+#     # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
+#     rec_loss = recloss + (bl_alpha * bdloss)
+# else:  
 def lesion_found(mask):
     found, min = False, -196608
     for i in range(len(mask)):
@@ -148,27 +154,21 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
-        bl_alpha = 4 # boundary loss weight
+        bl_alpha = 2 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
-        islesion = lesion_found(mask)
         mask = mask.to('cuda:0')
-        if(islesion): # if any lesion found run boundary loss 
+        if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
             bdloss = ((objective*mask) - (objective_recon*mask)).abs().mean()
-            # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
-            rec_loss = recloss + (bl_alpha * bdloss)
-        else:  
-            if self.loss_type == 'l1':
-                recloss = (objective - objective_recon).abs().mean()
-                #recloss = (objective - objective_recon).abs().mean() + (objective[:,:,20:108,20:108] - objective_recon[:,:,20:108,20:108]).abs().mean()
-            elif self.loss_type == 'l2':
-                recloss = F.mse_loss(objective, objective_recon)
-            else:
-                raise NotImplementedError()
+            total_loss = recloss + (bl_alpha * bdloss)
+        elif self.loss_type == 'l2':
+            recloss = F.mse_loss(objective, objective_recon)
+        else:
+            raise NotImplementedError()
         # if self.loss_type == 'l1':
         #     recloss = (objective - objective_recon).abs().mean()
         #     BoundaryLoss()
@@ -179,10 +179,10 @@ class BrownianBridgeModel(nn.Module):
 
         x0_recon = self.predict_x0_from_objective(x_t, y, t, objective_recon)
         log_dict = {
-            "loss": recloss,
+            "loss": total_loss,
             "x0_recon": x0_recon
         }
-        return recloss, log_dict
+        return total_loss, log_dict
 
     def q_sample(self, x0, y, t, noise=None):
         noise = default(noise, lambda: torch.randn_like(x0))
