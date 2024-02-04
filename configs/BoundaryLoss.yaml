@@ -19,7 +19,7 @@ data:
     # dataset_path: '/content/MyDrive/MyDrive/LOOCV/'
     dataset_path: '/content/MyDrive/MyDrive/LOOCV_aug/'
     image_size: 256
-    channels: 1
+    channels: 2
     to_normal: True
     flip: False
   train:
