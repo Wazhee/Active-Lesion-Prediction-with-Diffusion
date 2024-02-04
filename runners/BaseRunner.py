@@ -378,7 +378,7 @@ class BaseRunner(ABC):
             wandb.login()
             wandb.init(
               # Set the project where this run will be logged
-              project="DALP Diffusion based Active Lesion Prediction", 
+              project="DALP alpha 4", 
               # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
               name="experiment_{DALP}", 
               # Track hyperparameters and run metadata
@@ -416,7 +416,7 @@ class BaseRunner(ABC):
                                             step=self.global_step,
                                             opt_idx=i,
                                             stage='train')
-                        print("\n",loss)
+                    
                         loss.backward()
                         if self.global_step % accumulate_grad_batches == 0:
                             self.optimizer[i].step()
