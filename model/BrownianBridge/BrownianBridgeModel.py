@@ -148,7 +148,7 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
-        bl_alpha = 2 # boundary loss weight
+        bl_alpha = 4 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
@@ -158,7 +158,7 @@ class BrownianBridgeModel(nn.Module):
         mask = mask.to('cuda:0')
         if(islesion): # if any lesion found run boundary loss 
             recloss = (objective - objective_recon).abs().mean()
-            bdloss = bl_alpha * ((objective*mask) - (objective_recon*mask)).abs().mean()
+            bdloss = ((objective*mask) - (objective_recon*mask)).abs().mean()
             # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
             rec_loss = recloss + (bl_alpha * bdloss)
         else:  
