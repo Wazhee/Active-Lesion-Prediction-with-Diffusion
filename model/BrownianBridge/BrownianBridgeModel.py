@@ -11,23 +11,8 @@ from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
 
-# ploss code   
-# if(islesion): # if any lesion found run boundary loss 
-#     recloss = (objective - objective_recon).abs().mean()
-#     bdloss = ((objective*mask) - (objective_recon*mask)).abs().mean()
-#     # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
-#     rec_loss = recloss + (bl_alpha * bdloss)
-# else:  
-def convert2binary(tmp):
-    for i in range(len(tmp)): # batch
-        for j in range(len(tmp[i][0])): 
-            for k in range(len(tmp[i][0][0])):
-                if(tmp[0][0][j][k] > 0):
-                    tmp[i][0][j][k] = 1
-                else:
-                    tmp[0][0][j][k] = 0
-    return tmp
-    
+
+
 class BrownianBridgeModel(nn.Module):
     def __init__(self, model_config):
         super().__init__()
@@ -128,12 +113,8 @@ class BrownianBridgeModel(nn.Module):
 
         x_t, objective = self.q_sample(x0, y, t, noise) # x = target, y = input
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
-        mask = convert2binary(mask)
         mask = mask.to('cuda:0')
         if self.loss_type == 'l1':  # x0 = target, objective_recon = prediction
-            # save1,save2 = './prediction.png', './mask.png'
-            # im1,im2 = x0.cpu().detach().numpy(), mask.cpu().detach().numpy()
-            # cv2.imwrite(save1, im1[0][0]*300); cv2.imwrite(save2, im2[0][0]*300)
             recloss = (x0 - objective_recon).abs().mean()
             bloss = ((x0*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
             total_loss = recloss + (bloss)
@@ -144,13 +125,6 @@ class BrownianBridgeModel(nn.Module):
             recloss = F.mse_loss(objective, objective_recon)
         else:
             raise NotImplementedError()
-        # if self.loss_type == 'l1':
-        #     recloss = (objective - objective_recon).abs().mean()
-        #     BoundaryLoss()
-        # elif self.loss_type == 'l2':
-        #     recloss = F.mse_loss(objective, objective_recon)
-        # else:
-        #     raise NotImplementedError()
 
         x0_recon = self.predict_x0_from_objective(x_t, y, t, objective_recon)
         log_dict = {
