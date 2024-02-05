@@ -126,10 +126,10 @@ class BrownianBridgeModel(nn.Module):
 
         x0_recon = self.predict_x0_from_objective(x_t, y, t, objective_recon)
         log_dict = {
-            "loss": total_loss,
+            "loss": recloss,
             "x0_recon": x0_recon
         }
-        return total_loss, log_dict
+        return recloss, log_dict
 
     def q_sample(self, x0, y, t, noise=None):
         noise = default(noise, lambda: torch.randn_like(x0))
