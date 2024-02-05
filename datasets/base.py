@@ -4,7 +4,16 @@ from PIL import Image
 from pathlib import Path
 import pydicom as dicom
 
-    
+
+def convert2binary(tmp):
+    for i in range(len(tmp)): # batch
+        for j in range(len(tmp[i][0])): 
+            for k in range(len(tmp[i][0][0])):
+                if(tmp[0][0][j][k] > 0):
+                    tmp[i][0][j][k] = 1
+                else:
+                    tmp[0][0][j][k] = 0
+    return tmp
 class ImagePathDataset(Dataset):
     def __init__(self, image_paths, image_size=(256, 256), flip=False, to_normal=False):
         self.image_size = image_size
