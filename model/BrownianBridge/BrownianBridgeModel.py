@@ -138,7 +138,7 @@ class BrownianBridgeModel(nn.Module):
                 if(mask[0][0][i][j] > 0):
                     mask[0][0][i][j] = 1
                 else:
-                    mask[i][j] = 0
+                    mask[0][0][i][j] = 0
         mask = mask.to('cuda:0')
         print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
         # x0 = target, objective_recon = prediction
