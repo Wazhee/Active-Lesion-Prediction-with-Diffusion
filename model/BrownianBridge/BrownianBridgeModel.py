@@ -111,7 +111,7 @@ class BrownianBridgeModel(nn.Module):
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
-        x_t, objective = self.q_sample(x0, y, t, noise) # x = target, y = input
+        x_t, objective = self.q_sample(x0, y, t, noise) # x0 = target, y = input
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         tmp = objective_recon[0][0].cpu().detach().numpy()
         cv2.imwrite("./prediction.png", tmp*300)
