@@ -34,7 +34,7 @@ class ImagePathDataset(Dataset):
         image = None
         try:
             if(img_path.split('.')[1] == 'dcm'): # run dicom code
-                image = dicom.dcmread(image_path).pixel_array
+                image = dicom.dcmread(img_path).pixel_array
             else:
                 image = Image.open(img_path)
             print(image.shape)
