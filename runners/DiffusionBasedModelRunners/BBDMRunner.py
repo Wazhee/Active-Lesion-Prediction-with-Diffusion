@@ -166,7 +166,7 @@ class BBDMRunner(DiffusionBaseRunner):
         
         x = x.to(self.config.training.device[0])
         x_cond = x_cond.to(self.config.training.device[0])
-        loss, additional_info = net(x, x_cond, mask) 
+        loss, additional_info = net(x, x_cond, mask)  # [target, input, masks]
         # """Region Based Loss Function"""
         # region_fn = nn.L1Loss()
         # input_x, output_x = torch.tensor(x[:,:,20:108,20:108], requires_grad=True), x_cond[:,:,20:108,20:108]
