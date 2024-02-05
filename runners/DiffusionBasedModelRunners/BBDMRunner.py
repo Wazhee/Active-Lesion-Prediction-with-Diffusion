@@ -208,6 +208,7 @@ class BBDMRunner(DiffusionBaseRunner):
         #                  writer_tag=f'{stage}_one_step_sample' if stage != 'test' else None)
         #
         # sample = samples[-1]
+        # sample = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised).to('cpu')
         sample = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised).to('cpu')
         image_grid = get_image_grid(sample, grid_size, to_normal=self.config.data.dataset_config.to_normal)
         # save prediction
