@@ -42,7 +42,8 @@ class ImagePathDataset(Dataset):
 
         # if not image.mode == 'RGB':
         #     image = image.convert('RGB')
-        
+        if('C' in img_path):
+            print(f"type: {type(image)}")
         image = transform(image)
  
         # if self.to_normal:
