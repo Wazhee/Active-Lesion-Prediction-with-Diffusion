@@ -3,6 +3,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from pathlib import Path
 import pydicom as dicom
+import numpy as np
 
 
 def convert2binary(tmp):
