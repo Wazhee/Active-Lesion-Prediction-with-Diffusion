@@ -157,15 +157,16 @@ class BrownianBridgeModel(nn.Module):
         bl_alpha = 1 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
-
+        
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         mask = mask.to('cuda:0')
-        print("loss type: ", self.loss_type)
         if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
             bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
-            total_loss = recloss + (60 * bdloss)
+            total_loss = recloss + (bl_alpha * bdloss)
+            print("total loss1: ", total_loss)
+            print("total loss2: ", recloss + (2 * bdloss))
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
