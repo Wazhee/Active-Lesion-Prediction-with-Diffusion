@@ -117,7 +117,6 @@ class BrownianBridgeModel(nn.Module):
         if self.loss_type == 'l1':  # x0 = target, objective_recon = prediction
             recloss = (x0 - objective_recon).abs().mean()
             bloss = ((x0*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
-            total_loss = recloss + (bloss)
             total_loss = recloss + (bl_alpha * bloss)
             # print(f"recloss: {recloss}, bloss: {bl_alpha * bloss}, total: {total_loss}")
         elif self.loss_type == 'l2':
