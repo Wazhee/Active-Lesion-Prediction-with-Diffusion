@@ -10,34 +10,7 @@ import numpy as np
 from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
-from scipy import ndimage
-import scipy.ndimage.morphology as morpho
 
-# remove small objects
-def rso(im,small_object_size_threshold,max_dilat):
-    # detect image objects
-    sz_big=10000
-    sz_small=small_object_size_threshold
-    dfac = int( max_dilat*(1-min(1,(max(0,sz_small)/sz_big))) )
-    labeled, nr_objects = ndimage.label(im)
-    result = labeled*0
-    for obj_id in range(1, nr_objects+1):
-        # creates a binary image with the current object
-        obj_img = (labeled==obj_id)
-        # computes object's area
-        area = np.sum(obj_img)
-        if area>small_object_size_threshold:
-            if max_dilat>0:
-                # dilatation factor inversely proportional to area
-                dfac = int( max_dilat*(1-min(1,(max(0,area-sz_small)/sz_big))) )  
-            # dilates object
-                dilat = morpho.binary_dilation(obj_img, iterations=dfac)
-            else:
-                dilat =obj_img
-            result += dilat#obj_img
-            #result=np.logical_or(result,obj_img)
-    
-    return(torch.from_numpy(result))
 # ploss code   
 # if(islesion): # if any lesion found run boundary loss 
 #     recloss = (objective - objective_recon).abs().mean()
