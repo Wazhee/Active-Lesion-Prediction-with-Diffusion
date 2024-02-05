@@ -122,7 +122,7 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
-        bl_alpha = 1 # boundary loss weight
+        bl_alpha = 70 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
@@ -130,9 +130,7 @@ class BrownianBridgeModel(nn.Module):
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         mask = convert2binary(mask)
         mask = mask.to('cuda:0')
-        print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
-        # x0 = target, objective_recon = prediction
-        if self.loss_type == 'l1':
+        if self.loss_type == 'l1':  # x0 = target, objective_recon = prediction
             # save1,save2 = './prediction.png', './mask.png'
             # im1,im2 = x0.cpu().detach().numpy(), mask.cpu().detach().numpy()
             # cv2.imwrite(save1, im1[0][0]*300); cv2.imwrite(save2, im2[0][0]*300)
