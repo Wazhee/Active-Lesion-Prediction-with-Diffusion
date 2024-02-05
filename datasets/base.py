@@ -36,14 +36,14 @@ class ImagePathDataset(Dataset):
         except BaseException as e:
             print(img_path)
 
-        if not image.mode == 'RGB':
-            image = image.convert('RGB')
+        # if not image.mode == 'RGB':
+        #     image = image.convert('RGB')
 
         image = transform(image)
 
-        if self.to_normal:
-            image = (image - 0.5) * 2.
-            image.clamp_(-1., 1.)
+        # if self.to_normal:
+        #     image = (image - 0.5) * 2.
+        #     image.clamp_(-1., 1.)
 
         image_name = Path(img_path).stem
         return image, image_name
