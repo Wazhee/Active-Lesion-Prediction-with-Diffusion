@@ -33,7 +33,7 @@ class ImagePathDataset(Dataset):
         img_path = self.image_paths[index]
         image = None
         if(img_path.split('.')[1] == 'dcm'): # run dicom code
-                image = dicom.dcmread(image_path).pixel_array
+                image = dicom.dcmread(img_path).pixel_array
         else:
             image = Image.open(img_path)
         
