@@ -24,8 +24,8 @@ class ImagePathDataset(Dataset):
             p = 1.0
 
         transform = transforms.Compose([
-            transforms.RandomHorizontalFlip(p=p),
-            transforms.Resize(self.image_size),
+            # transforms.RandomHorizontalFlip(p=p),
+            # transforms.Resize(self.image_size),
             transforms.ToTensor()
         ])
 
@@ -39,7 +39,7 @@ class ImagePathDataset(Dataset):
         # if not image.mode == 'RGB':
         #     image = image.convert('RGB')
 
-        # image = transform(image)
+        image = transform(image)
 
         # if self.to_normal:
         #     image = (image - 0.5) * 2.
