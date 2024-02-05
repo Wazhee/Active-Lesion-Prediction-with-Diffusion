@@ -7,7 +7,6 @@ from pathlib import Path
 class ImagePathDataset(Dataset):
     def __init__(self, image_paths, image_size=(256, 256), flip=False, to_normal=False):
         self.image_size = image_size
-        print(self.image_size)
         self.image_paths = image_paths
         self._length = len(image_paths)
         self.flip = flip
@@ -34,6 +33,7 @@ class ImagePathDataset(Dataset):
         image = None
         try:
             image = Image.open(img_path)
+            print(image.shape)
         except BaseException as e:
             print(img_path)
 
