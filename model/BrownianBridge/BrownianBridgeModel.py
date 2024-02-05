@@ -182,7 +182,7 @@ class BrownianBridgeModel(nn.Module):
             "loss": total_loss,
             "x0_recon": x0_recon
         }
-        print("total loss: ", loss)
+        print("total loss: ", total_loss)
         return total_loss, log_dict
 
     def q_sample(self, x0, y, t, noise=None):
