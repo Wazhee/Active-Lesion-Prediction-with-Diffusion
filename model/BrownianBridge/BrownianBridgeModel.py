@@ -165,9 +165,8 @@ class BrownianBridgeModel(nn.Module):
             recloss = (objective - objective_recon).abs().mean()
             bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
             total_loss = recloss + (bl_alpha * bdloss)
-            print("sum mask: ", torch.sum(mask))
-            print("pred sum: ", torch.sum(objective_recon))
-            print("pred*mask sum: ", torch.sum(objective_recon*mask))
+            print("mask max: ", torch.max(mask))
+            print("pred max: ", torch.max(objective_recon))
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
