@@ -7,6 +7,7 @@ from pathlib import Path
 class ImagePathDataset(Dataset):
     def __init__(self, image_paths, image_size=(256, 256), flip=False, to_normal=False):
         self.image_size = image_size
+        print(self.image_size)
         self.image_paths = image_paths
         self._length = len(image_paths)
         self.flip = flip
@@ -38,7 +39,7 @@ class ImagePathDataset(Dataset):
 
         # if not image.mode == 'RGB':
         #     image = image.convert('RGB')
-
+        
         image = transform(image)
 
         # if self.to_normal:
