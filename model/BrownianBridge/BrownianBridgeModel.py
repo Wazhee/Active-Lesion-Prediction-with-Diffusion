@@ -168,7 +168,12 @@ class BrownianBridgeModel(nn.Module):
             torch.set_printoptions(threshold=10_000)
             print(mask.shape, objective.shape)
             print(torch.sum(mask), torch.max(mask))
-            print(mask)
+            # for i in range(len(mask[0][0])):
+            #     for j in range():
+            #         for k in range():
+            #             if(mask[i][j][k])
+            #             else:
+            #                 mask[i][j][k] = 0
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
