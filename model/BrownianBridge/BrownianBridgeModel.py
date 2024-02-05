@@ -18,21 +18,16 @@ from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
 #     # print(f'reconstruction loss: {recloss}, boundary loss: {bdloss}')
 #     rec_loss = recloss + (bl_alpha * bdloss)
 # else:  
-def lesion_found(mask):
-    found, min = False, -196608
-    for i in range(len(mask)):
-        # tmp = mask[i].detach().cpu().numpy()
-        # print(torch.sum(mask[i]), np.sum(tmp))
-        # tmp = np.transpose(tmp, (1,2,0))
-        # tmp = tmp/np.max(tmp)
-        if(torch.sum(mask[i]) > min):
-            found = True
-            mask[i] = (mask[i]+1)/torch.max(mask[i]+1)
-        else:
-            mask[i] = mask[i]*-1
-    mask.to('cuda:0')
-    return found
-
+def convert2binary(tmp):
+    for i in range(len(tmp)): # batch
+        for j in range(len(tmp[i][0])): 
+            for k in range(len(tmp[i][0][0])):
+                if(mask[0][0][i][j] > 0):
+                    tmp[i][0][i][j] = 1
+                else:
+                    mask[0][0][i][j] = 0
+    return tmp
+    
 class BrownianBridgeModel(nn.Module):
     def __init__(self, model_config):
         super().__init__()
@@ -133,12 +128,7 @@ class BrownianBridgeModel(nn.Module):
 
         x_t, objective = self.q_sample(x0, y, t, noise) # x = target, y = input
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
-        for i in range(len(mask[0][0])):
-            for j in range(len(mask[0][0][0])):
-                if(mask[0][0][i][j] > 0):
-                    mask[0][0][i][j] = 1
-                else:
-                    mask[0][0][i][j] = 0
+        mask = convert2binary(mask)
         mask = mask.to('cuda:0')
         print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
         # x0 = target, objective_recon = prediction
