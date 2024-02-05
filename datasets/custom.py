@@ -43,7 +43,7 @@ class CustomAlignedDataset(Dataset):
 
         self.imgs_ori = ImagePathDataset(image_paths_ori, self.image_size, flip=self.flip, to_normal=self.to_normal)
         self.imgs_cond = ImagePathDataset(image_paths_cond, self.image_size, flip=self.flip, to_normal=self.to_normal)
-        self.imgs_mask = ImagePathDataset(image_paths_mask, self.image_size, flip=False, to_normal=self.to_normal)
+        self.imgs_mask = ImagePathDataset(image_paths_mask, self.image_size, flip=False)
 
     def __len__(self):
         return len(self.imgs_ori)
