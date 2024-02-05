@@ -133,8 +133,13 @@ class BrownianBridgeModel(nn.Module):
 
         x_t, objective = self.q_sample(x0, y, t, noise) # x = target, y = input
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
+        for i in range(len(mask[0][0])):
+            for j in range(len(mask[0][0][0])):
+                if(mask[0][0][i][j] > 0):
+                    mask[0][0][i][j] = 1
+                else:
+                    mask[i][j] = 0
         mask = mask.to('cuda:0')
-        
         print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
         # x0 = target, objective_recon = prediction
         if self.loss_type == 'l1':
