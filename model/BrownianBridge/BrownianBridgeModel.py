@@ -136,9 +136,10 @@ class BrownianBridgeModel(nn.Module):
         mask = mask.to('cuda:0')
         
         print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
+        # x0 = target, objective_recon = prediction
         if self.loss_type == 'l1':
-            save1,save2 = './prediction.png', './target.png'
-            im1,im2 = x0.cpu().detach().numpy(), objective_recon.cpu().detach().numpy()
+            save1,save2 = './prediction.png', './mask.png'
+            im1,im2 = x0.cpu().detach().numpy(), mask.cpu().detach().numpy()
             cv2.imwrite(save1, im1[0][0]*300); cv2.imwrite(save2, im2[0][0]*300)
             recloss = (objective - objective_recon).abs().mean()
             bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
