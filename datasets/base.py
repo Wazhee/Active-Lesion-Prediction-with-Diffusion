@@ -39,7 +39,7 @@ class ImagePathDataset(Dataset):
         # if not image.mode == 'RGB':
         #     image = image.convert('RGB')
 
-        image = transform(image)
+        # image = transform(image)
 
         # if self.to_normal:
         #     image = (image - 0.5) * 2.
