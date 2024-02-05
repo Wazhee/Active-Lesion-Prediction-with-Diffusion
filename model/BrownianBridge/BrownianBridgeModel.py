@@ -133,20 +133,13 @@ class BrownianBridgeModel(nn.Module):
         print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
         # x0 = target, objective_recon = prediction
         if self.loss_type == 'l1':
-            save1,save2 = './prediction.png', './mask.png'
-            im1,im2 = x0.cpu().detach().numpy(), mask.cpu().detach().numpy()
-            cv2.imwrite(save1, im1[0][0]*300); cv2.imwrite(save2, im2[0][0]*300)
-            recloss = (objective - objective_recon).abs().mean()
-            bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
+            # save1,save2 = './prediction.png', './mask.png'
+            # im1,im2 = x0.cpu().detach().numpy(), mask.cpu().detach().numpy()
+            # cv2.imwrite(save1, im1[0][0]*300); cv2.imwrite(save2, im2[0][0]*300)
+            recloss = (x0 - objective_recon).abs().mean()
+            bloss = ((x0*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
+            print(f"recloss: {recloss}, bloss: {bloss}")
             total_loss = recloss + (bl_alpha * bdloss)
-            torch.set_printoptions(threshold=10_000)
-            
-            # for i in range(len(mask[0][0])):
-            #     for j in range():
-            #         for k in range():
-            #             if(mask[i][j][k])
-            #             else:
-            #                 mask[i][j][k] = 0
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
@@ -164,7 +157,6 @@ class BrownianBridgeModel(nn.Module):
             "loss": total_loss,
             "x0_recon": x0_recon
         }
-        print("total loss: ", bd_loss)
         return total_loss, log_dict
 
     def q_sample(self, x0, y, t, noise=None):
