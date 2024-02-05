@@ -165,7 +165,7 @@ class BrownianBridgeModel(nn.Module):
             x0_recon = y - objective_recon
         else:
             raise NotImplementedError
-        tmp = x0[0][0].cpu().detach().numpy()
+        tmp = x0_recon[0][0].cpu().detach().numpy()
         cv2.imwrite("./xzero.png", tmp)
         return x0_recon
 
