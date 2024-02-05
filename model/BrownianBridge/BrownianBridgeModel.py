@@ -127,6 +127,8 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
+        print(mask.shape, y.shape, x0.shape )
+        
         bl_alpha = 1 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
@@ -139,8 +141,7 @@ class BrownianBridgeModel(nn.Module):
             bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
             total_loss = recloss + (bl_alpha * bdloss)
             torch.set_printoptions(threshold=10_000)
-            print(mask.shape, objective.shape)
-            print(torch.sum(mask), torch.max(mask))
+            
             # for i in range(len(mask[0][0])):
             #     for j in range():
             #         for k in range():
