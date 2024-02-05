@@ -41,9 +41,9 @@ class CustomAlignedDataset(Dataset):
         self.flip = dataset_config.flip if stage == 'train' else False
         self.to_normal = dataset_config.to_normal
 
-        self.imgs_ori = ImagePathDataset(image_paths_ori, self.image_size, flip=self.flip, to_normal=self.to_normal)
-        self.imgs_cond = ImagePathDataset(image_paths_cond, self.image_size, flip=self.flip, to_normal=self.to_normal)
-        self.imgs_mask = ImagePathDataset(image_paths_mask, self.image_size, flip=False)
+        self.imgs_ori = ImagePathDataset(image_paths_ori, self.image_size)
+        self.imgs_cond = ImagePathDataset(image_paths_cond, self.image_size)
+        self.imgs_mask = ImagePathDataset(image_paths_mask, self.image_size)
 
     def __len__(self):
         return len(self.imgs_ori)
