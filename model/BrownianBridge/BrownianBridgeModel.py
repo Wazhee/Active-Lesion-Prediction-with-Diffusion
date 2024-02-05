@@ -135,7 +135,7 @@ class BrownianBridgeModel(nn.Module):
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         mask = mask.to('cuda:0')
         
-        print(f'obj: {objective}, obj_recon: {objective_recon}, x0: {x0}, y: {y}, mask: {mask}')
+        print(f'obj: {objective.shape}, obj_recon: {objective_recon.shape}, x0: {x0.shape}, y: {y.shape}, mask: {mask.shape}')
         if self.loss_type == 'l1':
             
             recloss = (objective - objective_recon).abs().mean()
