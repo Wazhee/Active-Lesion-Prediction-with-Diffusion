@@ -3,17 +3,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from pathlib import Path
 import pydicom as dicom
-import numpy as np
 
-def create_binary(img):
-    bw = np.array(img)
-    for i in range(len(bw)):
-        for j in range(len(bw[0])):
-            if(bw[i][j] > 0):
-                bw[i][j] = 1
-            else:
-                bw[i][j] = 0
-    return bw
     
 class ImagePathDataset(Dataset):
     def __init__(self, image_paths, image_size=(256, 256), flip=False, to_normal=False):
@@ -46,7 +36,7 @@ class ImagePathDataset(Dataset):
             if(img_path.split('.')[1] == 'dcm'): # run dicom code
                 image = dicom.dcmread(img_path).pixel_array
             else:
-                image = create_binary(np.array(Image.open(img_path)))
+                image = Image.open(img_path)
         except BaseException as e:
             print(e, img_path)
 
