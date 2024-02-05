@@ -32,7 +32,10 @@ class ImagePathDataset(Dataset):
         img_path = self.image_paths[index]
         image = None
         try:
-            image = Image.open(img_path)
+            if(img_path.split('.')[1] == 'dcm'): # run dicom code
+                image = dicom.dcmread(image_path).pixel_array
+            else:
+                image = Image.open(img_path)
             print(image.shape)
         except BaseException as e:
             print(img_path)
