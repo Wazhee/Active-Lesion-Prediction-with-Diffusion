@@ -163,7 +163,7 @@ class BrownianBridgeModel(nn.Module):
         mask = mask.to('cuda:0')
         if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
-            bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0)).abs().mean()
+            bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
             total_loss = recloss + (bl_alpha * bdloss)
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
