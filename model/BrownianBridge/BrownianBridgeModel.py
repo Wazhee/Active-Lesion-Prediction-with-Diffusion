@@ -22,10 +22,10 @@ def convert2binary(tmp):
     for i in range(len(tmp)): # batch
         for j in range(len(tmp[i][0])): 
             for k in range(len(tmp[i][0][0])):
-                if(mask[0][0][i][j] > 0):
+                if(tmp[0][0][i][j] > 0):
                     tmp[i][0][i][j] = 1
                 else:
-                    mask[0][0][i][j] = 0
+                    tmp[0][0][i][j] = 0
     return tmp
     
 class BrownianBridgeModel(nn.Module):
