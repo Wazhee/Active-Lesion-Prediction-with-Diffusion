@@ -134,8 +134,10 @@ class BrownianBridgeModel(nn.Module):
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         mask = mask.to('cuda:0')
+        
+        print(f'obj: {objective}, obj_recon: {objective_recon}, x0: {x0}, y: {y}, mask: {mask}')
         if self.loss_type == 'l1':
-            print(objective.shape, objective_recon.shape, mask.shape, y.shape)
+            
             recloss = (objective - objective_recon).abs().mean()
             bdloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
             total_loss = recloss + (bl_alpha * bdloss)
