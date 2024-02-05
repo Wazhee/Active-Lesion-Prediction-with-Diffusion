@@ -107,7 +107,7 @@ class BrownianBridgeModel(nn.Module):
         :param noise: Standard Gaussian Noise
         :return: loss
         """
-        bl_alpha = 100 # boundary loss weight
+        bl_alpha = 1000 # boundary loss weight
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
 
