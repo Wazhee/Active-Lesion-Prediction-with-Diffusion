@@ -113,7 +113,7 @@ class BrownianBridgeModel(nn.Module):
 
         x_t, objective = self.q_sample(x0, y, t, noise) # x = target, y = input
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
-        tmp = objective_recon[0][0].cpu().detach.np()
+        tmp = objective_recon[0][0].cpu().detach().numpy()
         cv2.imwrite("./prediction.png", tmp)
         mask = mask.to('cuda:0')
         if self.loss_type == 'l1':  # x0 = target, objective_recon = prediction
@@ -165,7 +165,7 @@ class BrownianBridgeModel(nn.Module):
             x0_recon = y - objective_recon
         else:
             raise NotImplementedError
-        tmp = x0[0][0].cpu().detach.np()
+        tmp = x0[0][0].cpu().detach().numpy()
         cv2.imwrite("./xzero.png", tmp)
         return x0_recon
 
