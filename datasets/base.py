@@ -51,7 +51,7 @@ class ImagePathDataset(Dataset):
 
         if isinstance(image, np.ndarray):
             image = Image.fromarray(image)
-        if not image.mode == 'RGB':
+        if not image.mode == 'RGB' and '/A/' not in img_path:
             image = image.convert('RGB')
         # if('/C/' in img_path):
         #     image = convert2binary(np.array(image))
