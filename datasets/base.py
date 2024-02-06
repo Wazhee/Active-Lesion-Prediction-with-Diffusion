@@ -52,7 +52,7 @@ class ImagePathDataset(Dataset):
                 tmp[:,:,0],tmp[:,:,1],tmp[:,:,2],tmp[:,:,3] = image,image,image,image
                 image = tmp
                 print(image.shape)
-                image = Image.fromarray(image)
+                image = Image.fromarray(image.astype(np.uint8))
                 
         except BaseException as e:
             print(e, img_path)
