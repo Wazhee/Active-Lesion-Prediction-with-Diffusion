@@ -162,7 +162,7 @@ class BBDMRunner(DiffusionBaseRunner):
         print(self.net.cond_latent_std)
 
     def loss_fn(self, net, batch, epoch, step, opt_idx=0, stage='train', write=True):
-        (x, x_name), (x_cond, x_cond_name) = batch
+        (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
         x = x.to(self.config.training.device[0])
         x_cond = x_cond.to(self.config.training.device[0])
 
