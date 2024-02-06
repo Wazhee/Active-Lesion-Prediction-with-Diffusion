@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from functools import partial
 from tqdm.autonotebook import tqdm
 import numpy as np
-
+import cv2
 from model.utils import extract, default
 from model.BrownianBridge.base.modules.diffusionmodules.openaimodel import UNetModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
