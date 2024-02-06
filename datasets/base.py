@@ -49,6 +49,8 @@ class ImagePathDataset(Dataset):
         except BaseException as e:
             print(e, img_path)
 
+        if isinstance(image, np.ndarray):
+            image = Image.fromarray(image)
         if not image.mode == 'RGB':
             image = image.convert('RGB')
         # if('/C/' in img_path):
