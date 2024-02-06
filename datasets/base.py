@@ -49,10 +49,10 @@ class ImagePathDataset(Dataset):
         except BaseException as e:
             print(e, img_path)
 
-        # if not image.mode == 'RGB':
-        #     image = image.convert('RGB')
-        if('/C/' in img_path):
-            image = convert2binary(np.array(image))
+        if not image.mode == 'RGB':
+            image = image.convert('RGB')
+        # if('/C/' in img_path):
+        #     image = convert2binary(np.array(image))
         image = transform(image)
  
         # if self.to_normal:
