@@ -44,21 +44,24 @@ class ImagePathDataset(Dataset):
         try:
             if(img_path.split('.')[1] == 'dcm'): # run dicom code
                 image = dicom.dcmread(img_path).pixel_array
+                print(image.shape)
             else:
                 image = Image.open(img_path)
         except BaseException as e:
             print(e, img_path)
 
         if isinstance(image, np.ndarray) and '/A/' not in img_path:
-            image = Image.fromarray(image)
             tmp = np.zeros(((256,256,4)))
             tmp[:,:,0],tmp[:,:,1],tmp[:,:,2],tmp[:,:,3] = image,image,image,image
             image = tmp
+            print(image.shape)
+            image = Image.fromarray(image)
+            
         # if not image.mode == 'RGB' and '/A/' not in img_path:
         #     image = image.convert('RGB')
         # if('/C/' in img_path):
         #     image = convert2binary(np.array(image))
-        print(image.shape)
+        
         image = transform(image)
  
         # if self.to_normal:
