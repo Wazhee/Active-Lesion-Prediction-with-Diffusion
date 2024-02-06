@@ -209,7 +209,7 @@ class BBDMRunner(DiffusionBaseRunner):
         
         
         samples, prediction = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised).to('cpu')
-        image_grid = get_image_grid(prediction, grid_size, to_normal=self.config.data.dataset_config.to_normal)
+        image_grid = get_image_grid(samples, grid_size, to_normal=self.config.data.dataset_config.to_normal)
         # save prediction
         im = Image.fromarray(image_grid)
         im.save(os.path.join(sample_path, f'skip_sample_{x_cond_name[1]}.png'))
