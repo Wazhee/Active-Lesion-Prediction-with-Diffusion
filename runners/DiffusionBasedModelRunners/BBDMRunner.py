@@ -111,7 +111,7 @@ class BBDMRunner(DiffusionBaseRunner):
             return total_ori_mean, total_cond_mean
 
         def calc_var(batch, ori_latent_mean=None, cond_latent_mean=None, total_ori_var=None, total_cond_var=None):
-            (x, x_name), (x_cond, x_cond_name) = batch
+            (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
             x = x.to(self.config.training.device[0])
             x_cond = x_cond.to(self.config.training.device[0])
 
@@ -181,7 +181,7 @@ class BBDMRunner(DiffusionBaseRunner):
         reverse_sample_path = make_dir(os.path.join(sample_path, 'reverse_sample'))
         reverse_one_step_path = make_dir(os.path.join(sample_path, 'reverse_one_step_samples'))
 
-        (x, x_name), (x_cond, x_cond_name) = batch
+        (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
 
         batch_size = x.shape[0] if x.shape[0] < 4 else 4
 
