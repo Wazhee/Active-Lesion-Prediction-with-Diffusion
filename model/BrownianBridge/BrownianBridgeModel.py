@@ -121,8 +121,8 @@ class BrownianBridgeModel(nn.Module):
             cv2.imwrite("./objective.png", objective[0][0].cpu().detach().numpy() * 300)
             cv2.imwrite("./x0.png", x0[0][0].cpu().detach().numpy() * 300)
             cv2.imwrite("./y.png", y[0][0].cpu().detach().numpy() * 300)
-            recloss = (objective - objective_recon).abs().mean()
-            bloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
+            recloss = (x0 - objective_recon).abs().mean()
+            bloss = ((x0*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
             total_loss = recloss + (bl_alpha * bloss)
             # print(f"recloss: {recloss}, bloss: {bl_alpha * bloss}, total: {total_loss}")
         elif self.loss_type == 'l2':
