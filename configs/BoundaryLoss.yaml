@@ -49,8 +49,8 @@ model:
 
   CondStageParams:
     n_stages: 2
-    in_channels: 4
-    out_channels: 4
+    in_channels: 3
+    out_channels: 3
 
   BB:
     optimizer:
@@ -83,7 +83,7 @@ model:
         image_size: 256
         in_channels: 8
         model_channels: 128
-        out_channels: 3
+        out_channels: 4
         num_res_blocks: 2
         attention_resolutions: !!python/tuple
           - 32
