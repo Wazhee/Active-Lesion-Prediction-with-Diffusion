@@ -373,6 +373,23 @@ class BaseRunner(ABC):
             f"start training {self.config.model.model_name} on {self.config.data.dataset_name}, {len(train_loader)} iters per epoch")
 
         try:
+            import wandb
+
+            wandb.init(
+              # Set the project where this run will be logged
+              project="DALP Reconstruction Loss", 
+              # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
+              name="experiment_{DALP}", 
+              # Track hyperparameters and run metadata
+              config={
+              "learning_rate": 0.02,
+              "architecture": "BBDM",
+              "dataset": "LOOCV_fixed",
+              "epochs": self.config.training.n_epochs,
+              })
+
+            # Magic
+            wandb.watch(self.net, log_freq=1)
             accumulate_grad_batches = self.config.training.accumulate_grad_batches
             for epoch in range(start_epoch, self.config.training.n_epochs):
                 if self.global_step > self.config.training.n_steps:
@@ -443,7 +460,8 @@ class BaseRunner(ABC):
                 end_time = time.time()
                 elapsed_rounded = int(round((end_time-start_time)))
                 print("training time: " + str(datetime.timedelta(seconds=elapsed_rounded)))
-
+                🐝 2️⃣ Log metrics from your script to W&B
+                wandb.log({"loss": loss})
                 # validation
                 if (epoch + 1) % self.config.training.validation_interval == 0 or (
                         epoch + 1) == self.config.training.n_epochs:
@@ -575,7 +593,7 @@ class BaseRunner(ABC):
                 self.sample_to_eval(self.net, test_loader, sample_path)
         else:
             test_iter = iter(test_loader)
-            for i in tqdm(range(1), initial=0, dynamic_ncols=True, smoothing=0.01):
+            for i in tqdm(range(len(test_loader), initial=0, dynamic_ncols=True, smoothing=0.01):
                 test_batch = next(test_iter)
                 sample_path = os.path.join(self.config.result.sample_path, str(i))
                 if self.config.training.use_DDP:
