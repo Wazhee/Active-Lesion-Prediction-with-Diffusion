@@ -1,7 +1,7 @@
 # Brownian Bridge Diffusion Model Template(Pixel Space)
 runner: "BBDMRunner"
 training:
-  n_epochs: 100
+  n_epochs: 200
   n_steps: 400000
   save_interval: 20
   sample_interval: 1
@@ -19,7 +19,7 @@ data:
     # dataset_path: '/content/MyDrive/MyDrive/LOOCV/'
     dataset_path: '/content/MyDrive/MyDrive/LOOCV_fixed/'
     image_size: 256
-    channels: 3
+    channels: 4
     to_normal: True
     flip: False
   train:
@@ -49,8 +49,8 @@ model:
 
   CondStageParams:
     n_stages: 2
-    in_channels: 3
-    out_channels: 3
+    in_channels: 4
+    out_channels: 4
 
   BB:
     optimizer:
