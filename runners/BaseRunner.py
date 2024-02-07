@@ -460,7 +460,7 @@ class BaseRunner(ABC):
                 end_time = time.time()
                 elapsed_rounded = int(round((end_time-start_time)))
                 print("training time: " + str(datetime.timedelta(seconds=elapsed_rounded)))
-                🐝 2️⃣ Log metrics from your script to W&B
+                #🐝 2️⃣ Log metrics from your script to W&B
                 wandb.log({"loss": loss})
                 # validation
                 if (epoch + 1) % self.config.training.validation_interval == 0 or (
