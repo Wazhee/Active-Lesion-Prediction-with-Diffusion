@@ -17,7 +17,7 @@ data:
   dataset_type: 'custom_aligned'
   dataset_config:
     # dataset_path: '/content/MyDrive/MyDrive/LOOCV/'
-    dataset_path: 'vb21/jiezy/10fold'
+    dataset_path: 'vb21/jiezy/10fold/10/'
     image_size: 256
     channels: 4
     to_normal: True
