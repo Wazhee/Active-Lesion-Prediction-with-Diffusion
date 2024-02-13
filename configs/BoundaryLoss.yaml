@@ -23,13 +23,13 @@ data:
     to_normal: True
     flip: False
   train:
-    batch_size: 2
+    batch_size: 3
     shuffle: True
   val:
-    batch_size: 2
+    batch_size: 3
     shuffle: True
   test:
-    batch_size: 2
+    batch_size: 3
     # shuffle: False
 
 model:
