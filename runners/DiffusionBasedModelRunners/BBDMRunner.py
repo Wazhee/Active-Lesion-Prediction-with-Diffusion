@@ -219,6 +219,12 @@ class BBDMRunner(DiffusionBaseRunner):
         if stage != 'test':
             self.writer.add_image(f'{stage}_ground_truth', image_grid, self.global_step, dataformats='HWC')
 
+        image_grid = get_image_grid(mask.to('cpu') * 300, grid_size, to_normal=self.config.data.dataset_config.to_normal)
+        im = Image.fromarray(image_grid)
+        im.save(os.path.join(sample_path, 'mask.png'))
+        if stage != 'test':
+            self.writer.add_image(f'{stage}_ground_truth', image_grid, self.global_step, dataformats='HWC')
+
     @torch.no_grad()
     def sample_to_eval(self, net, test_loader, sample_path):
         condition_path = make_dir(os.path.join(sample_path, f'condition'))
