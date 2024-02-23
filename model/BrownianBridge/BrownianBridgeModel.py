@@ -85,7 +85,7 @@ class BrownianBridgeModel(nn.Module):
     def get_parameters(self):
         return self.denoise_fn.parameters()
 
-    def forward(self, x, y, context=None):
+    def forward(self, x, y, mask, context=None):
         if self.condition_key == "nocond":
             context = None
         else:
@@ -93,9 +93,9 @@ class BrownianBridgeModel(nn.Module):
         b, c, h, w, device, img_size, = *x.shape, x.device, self.image_size
         assert h == img_size and w == img_size, f'height and width of image must be {img_size}'
         t = torch.randint(0, self.num_timesteps, (b,), device=device).long()
-        return self.p_losses(x, y, context, t)
+        return self.p_losses(x, y, mask, context, t)
 
-    def p_losses(self, x0, y, context, t, noise=None):
+    def p_losses(self, x0, y, mask, context, t, noise=None):
         """
         model loss
         :param x0: encoded x_ori, E(x_ori) = x0
@@ -107,11 +107,14 @@ class BrownianBridgeModel(nn.Module):
         """
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
-
+        bl_alpha = 100
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
+        mask = mask.to('cuda:0')
         if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
+            bloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
+            total_loss = recloss + (bl_alpha * bloss)
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
@@ -119,10 +122,10 @@ class BrownianBridgeModel(nn.Module):
 
         x0_recon = self.predict_x0_from_objective(x_t, y, t, objective_recon)
         log_dict = {
-            "loss": recloss,
+            "loss": total_loss,
             "x0_recon": x0_recon
         }
-        return recloss, log_dict
+        return total_loss, log_dict
 
     def q_sample(self, x0, y, t, noise=None):
         noise = default(noise, lambda: torch.randn_like(x0))
