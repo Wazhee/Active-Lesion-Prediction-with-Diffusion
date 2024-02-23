@@ -166,7 +166,7 @@ class BBDMRunner(DiffusionBaseRunner):
         x = x.to(self.config.training.device[0])
         x_cond = x_cond.to(self.config.training.device[0])
 
-        loss, additional_info = net(x, x_cond)
+        loss, additional_info = net(x, x_cond, mask)
         if write:
             self.writer.add_scalar(f'loss/{stage}', loss, step)
             if additional_info.__contains__('recloss_noise'):
