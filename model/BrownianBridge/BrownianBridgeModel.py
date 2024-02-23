@@ -107,7 +107,7 @@ class BrownianBridgeModel(nn.Module):
         """
         b, c, h, w = x0.shape
         noise = default(noise, lambda: torch.randn_like(x0))
-        bl_alpha = 100
+        bl_alpha = 1000
         x_t, objective = self.q_sample(x0, y, t, noise)
         objective_recon = self.denoise_fn(x_t, timesteps=t, context=context)
         mask = mask.to('cuda:0')
