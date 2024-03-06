@@ -177,18 +177,19 @@ class BBDMRunner(DiffusionBaseRunner):
 
     @torch.no_grad()
     def sample(self, net, batch, sample_path, stage='train'):
-        sample_path = make_dir(os.path.join(sample_path, f'{stage}_sample'))
-        reverse_sample_path = make_dir(os.path.join(sample_path, 'reverse_sample'))
-        reverse_one_step_path = make_dir(os.path.join(sample_path, 'reverse_one_step_samples'))
-
-        (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
-
-        batch_size = x.shape[0] if x.shape[0] < 4 else 4
-
-        x = x[0:batch_size].to(self.config.training.device[0])
-        x_cond = x_cond[0:batch_size].to(self.config.training.device[0])
-
         grid_size = 4
+        # sample_path = make_dir(os.path.join(sample_path, f'{stage}_sample'))
+        # reverse_sample_path = make_dir(os.path.join(sample_path, 'reverse_sample'))
+        # reverse_one_step_path = make_dir(os.path.join(sample_path, 'reverse_one_step_samples'))
+
+        # (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
+
+        # batch_size = x.shape[0] if x.shape[0] < 4 else 4
+
+        # x = x[0:batch_size].to(self.config.training.device[0])
+        # x_cond = x_cond[0:batch_size].to(self.config.training.device[0])
+
+        # grid_size = 4
 
         # samples, one_step_samples = net.sample(x_cond,
         #                                        clip_denoised=self.config.testing.clip_denoised,
