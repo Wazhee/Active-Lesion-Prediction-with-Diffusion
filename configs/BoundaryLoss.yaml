@@ -16,8 +16,8 @@ data:
   dataset_name: 'LOOCV'
   dataset_type: 'custom_aligned'
   dataset_config:
-    dataset_path: '/content/MyDrive/MyDrive/4Fold_no_aug/'
-    # dataset_path: '/content/MyDrive/MyDrive/4Fold'
+    # dataset_path: '/content/MyDrive/MyDrive/4Fold_no_aug/'
+    dataset_path: '/content/MyDrive/MyDrive/4Fold'
     image_size: 256
     channels: 4
     to_normal: True
