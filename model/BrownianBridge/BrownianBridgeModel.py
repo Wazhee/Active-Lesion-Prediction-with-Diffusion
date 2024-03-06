@@ -113,8 +113,8 @@ class BrownianBridgeModel(nn.Module):
         mask = mask.to('cuda:0')
         if self.loss_type == 'l1':
             recloss = (objective - objective_recon).abs().mean()
-            bloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
-            total_loss = recloss + (bl_alpha * bloss)
+            #bloss = ((objective*(mask>0)) - (objective_recon*(mask>0))).abs().mean()
+            #total_loss = recloss + (bl_alpha * bloss)
         elif self.loss_type == 'l2':
             recloss = F.mse_loss(objective, objective_recon)
         else:
@@ -122,10 +122,10 @@ class BrownianBridgeModel(nn.Module):
 
         x0_recon = self.predict_x0_from_objective(x_t, y, t, objective_recon)
         log_dict = {
-            "loss": total_loss,
+            "loss": recloss,
             "x0_recon": x0_recon
         }
-        return total_loss, log_dict
+        return recloss, log_dict
 
     def q_sample(self, x0, y, t, noise=None):
         noise = default(noise, lambda: torch.randn_like(x0))
