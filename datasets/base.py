@@ -65,9 +65,9 @@ class ImagePathDataset(Dataset):
         #     image = image.convert('RGB')
         # if('/C/' in img_path):
         #     image = convert2binary(np.array(image))
-        if(image.shape != self.image_size):
-            image = cv2.resize(image, self.image_size, interpolation = cv2.INTER_LANCZOS4)
         image = Image.fromarray(image.astype(np.uint8))
+        # if(image.shape != self.image_size):
+        #     image = cv2.resize(image, self.image_size, interpolation = cv2.INTER_LANCZOS4)
         image = transform(image)
  
         # if self.to_normal:
