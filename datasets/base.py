@@ -51,7 +51,6 @@ class ImagePathDataset(Dataset):
                 tmp = np.zeros((256,256,4))
                 tmp[:,:,0],tmp[:,:,1],tmp[:,:,2],tmp[:,:,3] = image,image,image,image
                 image = tmp
-                # image = Image.fromarray(image.astype(np.uint8))
                 
         except BaseException as e:
             print(e, img_path)
@@ -68,6 +67,7 @@ class ImagePathDataset(Dataset):
         #     image = convert2binary(np.array(image))
         if(image.shape != self.image_size):
             image = cv2.resize(image, self.image_size, interpolation = cv2.INTER_LANCZOS4)
+        image = Image.fromarray(image.astype(np.uint8))
         image = transform(image)
  
         # if self.to_normal:
