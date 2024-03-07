@@ -4,6 +4,7 @@ from PIL import Image
 from pathlib import Path
 import pydicom as dicom
 import numpy as np
+import cv2
 
 
 def convert2binary(tmp):
