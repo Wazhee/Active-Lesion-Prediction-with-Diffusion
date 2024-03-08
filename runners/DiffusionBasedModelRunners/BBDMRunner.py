@@ -203,25 +203,25 @@ class BBDMRunner(DiffusionBaseRunner):
         sample = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised).to('cpu')
         image_grid = get_image_grid(sample, grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'skip_sample.png'))
+        im.save(os.path.join(sample_path, f'{x_name}_skip_sample.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_skip_sample', image_grid, self.global_step, dataformats='HWC')
 
         image_grid = get_image_grid(x_cond.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'condition.png'))
+        im.save(os.path.join(sample_path, f'{x_name}_condition.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_condition', image_grid, self.global_step, dataformats='HWC')
 
         image_grid = get_image_grid(x.to('cpu'), grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'ground_truth.png'))
+        im.save(os.path.join(sample_path, f'{x_name}_ground_truth.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_ground_truth', image_grid, self.global_step, dataformats='HWC')
 
         image_grid = get_image_grid(mask.to('cpu') * 300, grid_size, to_normal=self.config.data.dataset_config.to_normal)
         im = Image.fromarray(image_grid)
-        im.save(os.path.join(sample_path, 'mask.png'))
+        im.save(os.path.join(sample_path, f'{x_name}_mask.png'))
         if stage != 'test':
             self.writer.add_image(f'{stage}_ground_truth', image_grid, self.global_step, dataformats='HWC')
 
