@@ -13,12 +13,12 @@ testing:
   sample_num: 1
 
 data:
-  dataset_name: '128'
+  dataset_name: '20steps'
   dataset_type: 'custom_aligned'
   dataset_config:
     # dataset_path: '/content/MyDrive/MyDrive/4Fold_no_aug/'
     dataset_path: '/content/MyDrive/MyDrive/4Fold'
-    image_size: 128
+    image_size: 256
     channels: 4
     to_normal: True
     flip: False
@@ -73,14 +73,14 @@ model:
 
       skip_sample: True
       sample_type: 'linear' # options {"linear", "sin"}
-      sample_step: 200
+      sample_step: 20
 
       num_timesteps: 1000 # timesteps
       eta: 1.0 # DDIM reverse process eta
       max_var: 1.0 # maximum variance
 
       UNetParams:
-        image_size: 128
+        image_size: 256
         in_channels: 8
         model_channels: 128
         out_channels: 4
