@@ -13,13 +13,13 @@ testing:
   sample_num: 1
 
 data:
-  dataset_name: '200steps'
+  dataset_name: 'pdw'
   dataset_type: 'custom_aligned'
   dataset_config:
     # dataset_path: '/content/MyDrive/MyDrive/4Fold_no_aug/'
     dataset_path: '/content/MyDrive/MyDrive/4Fold'
     image_size: 256
-    channels: 4
+    channels: 1
     to_normal: True
     flip: False
   train:
@@ -81,7 +81,7 @@ model:
 
       UNetParams:
         image_size: 256
-        in_channels: 8
+        in_channels: 5
         model_channels: 128
         out_channels: 4
         num_res_blocks: 2
