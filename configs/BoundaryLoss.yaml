@@ -81,9 +81,9 @@ model:
 
       UNetParams:
         image_size: 256
-        in_channels: 5
+        in_channels: 4
         model_channels: 128
-        out_channels: 4
+        out_channels: 1
         num_res_blocks: 2
         attention_resolutions: !!python/tuple
           - 32
