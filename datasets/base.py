@@ -47,7 +47,7 @@ class ImagePathDataset(Dataset):
                 image = dicom.dcmread(img_path).pixel_array
                 #pdw,flair,t2,pre
                 pdw, flair, t2, pre = image[:,:,0],image[:,:,1],image[:,:,2],image[:,:,3]
-                image = pdw
+                image = flair
             else:
                 image = Image.open(img_path).convert('L')
                 image = np.array(image)
