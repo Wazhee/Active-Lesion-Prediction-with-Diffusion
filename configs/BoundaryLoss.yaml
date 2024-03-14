@@ -13,7 +13,7 @@ testing:
   sample_num: 1
 
 data:
-  dataset_name: 't2'
+  dataset_name: 'pre'
   dataset_type: 'custom_aligned'
   dataset_config:
     # dataset_path: '/content/MyDrive/MyDrive/4Fold_no_aug/'
