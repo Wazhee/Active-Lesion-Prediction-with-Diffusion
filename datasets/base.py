@@ -48,7 +48,6 @@ class ImagePathDataset(Dataset):
                 #pdw,flair,t2,pre
                 pdw, flair, t2, pre = image[:,:,0],image[:,:,1],image[:,:,2],image[:,:,3]
                 image = image[:,:,2:] # t2 and pre
-                print(image.shape)
             else:
                 image = Image.open(img_path).convert('L')
                 image = np.array(image)
@@ -73,7 +72,7 @@ class ImagePathDataset(Dataset):
         # if(image.shape != self.image_size):
         #     image = cv2.resize(image, self.image_size, interpolation = cv2.INTER_LANCZOS4)
         image = transform(image)
- 
+        print(image.shape)
         # if self.to_normal:
         #     image = (image - 0.5) * 2.
         #     image.clamp_(-1., 1.)
