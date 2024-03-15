@@ -163,6 +163,7 @@ class BBDMRunner(DiffusionBaseRunner):
 
     def loss_fn(self, net, batch, epoch, step, opt_idx=0, stage='train', write=True):
         (x, x_name), (x_cond, x_cond_name), (mask, mask_name) = batch
+        print(x.shape)
         x = x.to(self.config.training.device[0])
         x_cond = x_cond.to(self.config.training.device[0])
 
