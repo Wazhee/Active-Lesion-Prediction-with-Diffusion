@@ -72,7 +72,6 @@ class ImagePathDataset(Dataset):
         # if(image.shape != self.image_size):
         #     image = cv2.resize(image, self.image_size, interpolation = cv2.INTER_LANCZOS4)
         image = transform(image)
-        print(image.shape)
         # if self.to_normal:
         #     image = (image - 0.5) * 2.
         #     image.clamp_(-1., 1.)
