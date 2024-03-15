@@ -48,6 +48,7 @@ class ImagePathDataset(Dataset):
                 #pdw,flair,t2,pre
                 pdw, flair, t2, pre = image[:,:,0],image[:,:,1],image[:,:,2],image[:,:,3]
                 image = image[:,:,2:] # t2 and pre
+                print(image.shape)
             else:
                 image = Image.open(img_path).convert('L')
                 image = np.array(image)
