@@ -20,7 +20,7 @@ data:
     #dataset_path: '/content/MyDrive/MyDrive/4Fold'
     dataset_path: '/content/MyDrive/MyDrive/4fold_v4/'
     image_size: 256
-    channels: 2
+    channels: 1
     to_normal: True
     flip: False
   train:
