@@ -18,7 +18,7 @@ data:
   dataset_config:
     # dataset_path: '/content/MyDrive/MyDrive/4Fold_no_aug/'
     #dataset_path: '/content/MyDrive/MyDrive/4Fold'
-    dataset_path: '/content/MyDrive/MyDrive/4fold_v4/'
+    dataset_path: '/content/MyDrive/MyDrive/4fold_v3/'
     image_size: 256
     channels: 1
     to_normal: True
