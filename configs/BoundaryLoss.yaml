@@ -20,7 +20,7 @@ data:
     #dataset_path: '/content/MyDrive/MyDrive/4Fold'
     dataset_path: '/content/MyDrive/MyDrive/4fold_v3/'
     image_size: 256
-    channels: 1
+    channels: 4
     to_normal: True
     flip: False
   train:
@@ -82,7 +82,7 @@ model:
 
       UNetParams:
         image_size: 256
-        in_channels: 6
+        in_channels: 8
         model_channels: 128
         out_channels: 1
         num_res_blocks: 4
