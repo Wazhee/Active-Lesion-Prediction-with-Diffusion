@@ -454,7 +454,7 @@ class BaseRunner(ABC):
                             if not self.config.training.use_DDP or \
                                     (self.config.training.use_DDP and self.config.training.local_rank) == 0:
                                 val_batch = next(iter(val_loader))
-                                self.sample_step(val_batch=val_batch, train_batch=train_batch)
+                                #self.sample_step(val_batch=val_batch, train_batch=train_batch)
                                 torch.cuda.empty_cache()
 
                 end_time = time.time()
