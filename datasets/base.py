@@ -45,14 +45,14 @@ class ImagePathDataset(Dataset):
         try:
             if(img_path.split('.')[1] == 'dcm'): # run dicom code
                 image = dicom.dcmread(img_path).pixel_array
-                #pdw,flair,t2,pre
-                # pdw, flair, t2, pre = image[:,:,0],image[:,:,1],image[:,:,2],image[:,:,3]
-                # image = pre 
+                pdw,flair,t2,pre
+                pdw, flair, t2, pre = image[:,:,0],image[:,:,1],image[:,:,2],image[:,:,3]
+                image = image[:,:,2:]
             else:
                 image = Image.open(img_path).convert('L')
                 image = np.array(image)
-                tmp = np.zeros((256,256,4))
-                tmp[:,:,0],tmp[:,:,1],tmp[:,:,2],tmp[:,:,3] = image,image,image,image
+                tmp = np.zeros((256,256,2)) # tmp = np.zeros((256,256,4))
+                tmp[:,:,0],tmp[:,:,1] = image,image
                 image = tmp
                 
         except BaseException as e:
