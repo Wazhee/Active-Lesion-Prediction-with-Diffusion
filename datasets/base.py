@@ -45,7 +45,7 @@ class ImagePathDataset(Dataset):
         try:
             if(img_path.split('.')[1] == 'dcm'): # run dicom code
                 image = dicom.dcmread(img_path).pixel_array
-                pdw,flair,t2,pre
+                #pdw,flair,t2,pre
                 pdw, flair, t2, pre = image[:,:,0],image[:,:,1],image[:,:,2],image[:,:,3]
                 image = image[:,:,2:]
             else:
