@@ -9,6 +9,7 @@ import numpy as np
 from utils import dict2namespace, get_runner, namespace2dict
 import torch.multiprocessing as mp
 import torch.distributed as dist
+from evaluation.evaluation import ImageEvaluator, Menu
 
 
 def parse_args_and_config():
@@ -18,7 +19,11 @@ def parse_args_and_config():
     parser.add_argument('-s', '--seed', type=int, default=1234, help='Random seed')
     parser.add_argument('-r', '--result_path', type=str, default='results', help="The directory to save results")
 
-    parser.add_argument('-t', '--train', action='store_true', default=False, help='train the model')
+    parser.add_argument('--evaluate', action='store_true', help='Enable evaluation mode')
+    parser.add_argument('--mask_path', type=str, default=None, help='Path to the mask directory')
+    parser.add_argument('--resolution', type=int, nargs=2, metavar=('WIDTH', 'HEIGHT'), help='Resolution of the images for evaluation')
+    parser.add_argument('--version', type=int, default=0, help='Version number for the datasets')
+
     parser.add_argument('--sample_to_eval', action='store_true', default=False, help='sample for evaluation')
     parser.add_argument('--sample_at_start', action='store_true', default=False, help='sample at start(for debug)')
     parser.add_argument('--save_top', action='store_true', default=False, help="save top loss checkpoint")
@@ -69,11 +74,11 @@ def DDP_run_fn(rank, world_size, config):
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = config.args.port
     dist.init_process_group(backend='nccl', rank=rank, world_size=world_size)
-
     set_random_seed(config.args.seed)
 
     local_rank = dist.get_rank()
     torch.cuda.set_device(local_rank)
+    print("\nGot HERE",local_rank)
     config.training.device = [torch.device("cuda:%d" % local_rank)]
     print('using device:', config.training.device)
     config.training.local_rank = local_rank
@@ -108,20 +113,71 @@ def main():
     nconfig, dconfig = parse_args_and_config()
     args = nconfig.args
     gpu_ids = args.gpu_ids
-    if gpu_ids == "-1": # Use CPU
-        nconfig.training.use_DDP = False
-        nconfig.training.device = [torch.device("cpu")]
-        CPU_singleGPU_launcher(nconfig)
+    if args.evaluate:
+        dataset_name = nconfig.data.dataset_name
+        model_name = nconfig.model.model_name
+        exp_path = f"{args.result_path}{dataset_name}/{model_name}/samples/" 
+#         evaluator = ImageEvaluator(exp_path, args.resolution, args.version, args.mask_path)
+#         evaluator.load_images()
+#         evaluator.evaluate_all_images()
+        evaluator = ImageEvaluator(exp_path, args.resolution, args.version, args.mask_path)
+        menu = Menu()
+        while(menu.get_choice() < 5):
+            menu.display_menu()
+
+            if menu.choice == 1:
+                evaluator.load_images()
+                evaluator.evaluate_all_images()
+
+            elif menu.choice == 2:
+                if not evaluator.mask_arr:
+                    evaluator.load_images()
+                idx = int(input("Which image would you like to evaluate?: "))
+                print(evaluator.evaluate_single_image(idx))
+
+            elif menu.choice == 3:
+                if version == 4:
+                    version = 1
+                else:
+                    version += 1
+                evaluator.version = version
+                evaluator.mask_arr = []
+                evaluator.gt_arr = []
+                evaluator.pred_arr = []
+                evaluator.id_arr = []
+
+            elif menu.choice == 4:
+                try:
+                    evaluator.create_csv(evaluator.dice_scores, dim[0], version)
+                    subject_scores = {}
+                    for id in evaluator.id_arr:
+                        subject = id.split('_')[0]
+                        if subject in subject_scores:
+                            subject_scores[subject].append(evaluator.dice_scores[id])
+                        else:
+                            subject_scores[subject] = [evaluator.dice_scores[id]]
+
+                    for subject in subject_scores:
+                        subject_scores[subject] = sum(subject_scores[subject]) / len(subject_scores[subject])
+                    evaluator.create_csv(subject_scores, dim[0], version * 10)
+                except:
+                    print("Please ensure all variables are defined first")
+                break
     else:
-        gpu_list = gpu_ids.split(",")
-        if len(gpu_list) > 1:
-            os.environ['CUDA_VISIBLE_DEVICES'] = gpu_ids
-            nconfig.training.use_DDP = True
-            DDP_launcher(world_size=len(gpu_list), run_fn=DDP_run_fn, config=nconfig)
-        else:
+        if gpu_ids == "-1": # Use CPU
             nconfig.training.use_DDP = False
-            nconfig.training.device = [torch.device(f"cuda:{gpu_list[0]}")]
+            nconfig.training.device = [torch.device("cpu")]
             CPU_singleGPU_launcher(nconfig)
+        else:
+            gpu_list = gpu_ids.split(",")
+            if len(gpu_list) > 1:
+                os.environ['CUDA_VISIBLE_DEVICES'] = gpu_ids
+                nconfig.training.use_DDP = True
+                DDP_launcher(world_size=len(gpu_list), run_fn=DDP_run_fn, config=nconfig)
+            else:
+                nconfig.training.use_DDP = False
+                nconfig.training.device = [torch.device(f"cuda:{gpu_list[0]}")]
+                CPU_singleGPU_launcher(nconfig)
     return
 
 
