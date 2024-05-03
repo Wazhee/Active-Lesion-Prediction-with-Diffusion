@@ -17,6 +17,23 @@ Similarity (DS).
   <img width="599" alt="Screenshot 2024-01-31 at 2 48 59 PM" src="https://github.com/Wazhee/Active-Lesion-Prediction-with-Diffusion/assets/34732790/af01a4b3-c398-4a9d-9da2-e9dac11e51eb">
 </p>
 
+## installing dependencies (python code)
+```python
+import yaml
+import os
+from tqdm import tqdm
+
+with open("environment.yml") as file_handle:
+    environment_data = yaml.safe_load(file_handle)
+for dependency in environment_data["dependencies"]:
+    if isinstance(dependency, dict):
+      for lib in tqdm(dependency['pip']):
+        os.system(f"pip install {lib}")
+!pip install wandb
+!pip install pytorch_fid
+!pip install pydicom
+```
+
 
 ## Training DALP Model
 ```yaml
