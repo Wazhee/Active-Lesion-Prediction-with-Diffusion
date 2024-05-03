@@ -20,17 +20,17 @@ Similarity (DS).
 
 ## Training DALP Model
 ```yaml
-python main.py --config ./configs/L2_v1.yaml --result_path ./Jason_results/ --resume_model ./Jason_results/L2_v1/BrownianBridge/checkpoint/latest_model_200.pth --gpu_ids 1
+python main.py --train --config ./configs/configfilename.yaml --result_path ./save/directory/ --gpu_ids 0
 ```
 
 ## Testing DALP Model
 ```yaml
-python main.py --config ./configs/L2_v1.yaml --result_path ./Jason_results/ --resume_model ./Jason_results/L2_v1/BrownianBridge/checkpoint/latest_model_200.pth --gpu_ids 1
+python main.py --config ./configs/configfilename.yaml --result_path ./save/directory/ --resume_model ./save/directory/BrownianBridge/checkpoint/checkpoint_name.pth --gpu_ids 0
 ```
 
 ## Evaluating DALP Model
 ```yaml
-python main.py --config ./configs/L2_v1.yaml --result_path ./Jason_results/ --resume_model ./Jason_results/L2_v1/BrownianBridge/checkpoint/latest_model_200.pth --gpu_ids 1
+python main.py --evaluate --maskpath path/to/annotations/ --config ./configs/configfilename.yaml --result_path ./save/directory/ --resume_model ./save/directory/BrownianBridge/checkpoint/checkpoint_name.pth --gpu_ids 0
 ```
 
 For datasets that have paired image data, the path should be formatted as:
