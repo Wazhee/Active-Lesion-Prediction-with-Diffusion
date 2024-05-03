@@ -9,7 +9,7 @@ Similarity (DS).
 ```
 
 
-``Architecture Diagram``
+``Image-to-Image Translation``
 <img width="866" alt="Screenshot 2024-01-31 at 2 45 55 PM" src="https://github.com/Wazhee/Active-Lesion-Prediction-with-Diffusion/assets/34732790/11798bc7-577c-41b9-9eb3-5718fe1b6b92">
 
 ``Example Results``
