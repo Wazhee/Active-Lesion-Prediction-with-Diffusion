@@ -9,7 +9,7 @@ Similarity (DS).
 ```
 
 
-``Image-to-Image Translation``
+## Image-to-Image Translation
 <img width="866" alt="Screenshot 2024-01-31 at 2 45 55 PM" src="https://github.com/Wazhee/Active-Lesion-Prediction-with-Diffusion/assets/34732790/11798bc7-577c-41b9-9eb3-5718fe1b6b92">
 
 ``Example Results``
@@ -18,6 +18,17 @@ Similarity (DS).
 </p>
 
 
+## Data preparation
+### Paired translation task
+For datasets that have paired image data, the path should be formatted as:
+```yaml
+your_dataset_path/train/A  # training reference
+your_dataset_path/train/B  # training ground truth
+your_dataset_path/val/A  # validating reference
+your_dataset_path/val/B  # validating ground truth
+your_dataset_path/test/A  # testing reference
+your_dataset_path/test/B  # testing ground truth
+```
 
 
 We used Diffusion Probabilistic Model proposed by Bo Li et al 2023, referenced below
