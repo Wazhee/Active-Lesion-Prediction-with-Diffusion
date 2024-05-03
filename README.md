@@ -1,5 +1,6 @@
 # DALP: Diffusion based Active Lesion Prediction Model
 
+## Requirements
 ```
 Short Description:
 Diffusion probabilistic models are generative AI models, capable of generating high fidelity images. By gradually adding noise to the input data (forward diffusion), and learning to generate the input
