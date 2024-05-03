@@ -18,8 +18,21 @@ Similarity (DS).
 </p>
 
 
-## Data preparation
-### Paired translation task
+## Training DALP Model
+```yaml
+python main.py --config ./configs/L2_v1.yaml --result_path ./Jason_results/ --resume_model ./Jason_results/L2_v1/BrownianBridge/checkpoint/latest_model_200.pth --gpu_ids 1
+```
+
+## Testing DALP Model
+```yaml
+python main.py --config ./configs/L2_v1.yaml --result_path ./Jason_results/ --resume_model ./Jason_results/L2_v1/BrownianBridge/checkpoint/latest_model_200.pth --gpu_ids 1
+```
+
+## Evaluating DALP Model
+```yaml
+python main.py --config ./configs/L2_v1.yaml --result_path ./Jason_results/ --resume_model ./Jason_results/L2_v1/BrownianBridge/checkpoint/latest_model_200.pth --gpu_ids 1
+```
+
 For datasets that have paired image data, the path should be formatted as:
 ```yaml
 your_dataset_path/train/A  # training reference
